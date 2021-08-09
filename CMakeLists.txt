@@ -10,6 +10,8 @@ set(effectFiles
 "src/Effects/Effect.cpp"
 "src/Effects/Blur.cpp"
 "src/Effects/base_vt.cpp"
+"src/Effects/Shake.cpp"
+"src/Effects/EffectPipeline.cpp"
 )
 
 set(particleFiles

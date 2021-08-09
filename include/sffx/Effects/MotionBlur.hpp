@@ -17,6 +17,13 @@ namespace sffx
                 sf::Time delay = sf::milliseconds(25) 
             );
 
+            void setSize( unsigned width, unsigned height );
+            sf::Vector2u getSize() const;
+
+            void setDelay( sf::Time delay );
+            sf::Time getDelay() const;
+
+
             void setFrames( size_t frames );
             size_t getFrames() const;    
             

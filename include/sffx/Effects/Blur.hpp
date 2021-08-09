@@ -24,6 +24,12 @@ namespace sffx
         sf::Vector2<bool> getAxis() const;
         void setAxis(sf::Vector2<bool> axis);
 
+        void setIntensity( float intensity );
+        float getIntensity() const;
+
+        void setScale( float scale );
+        float getScale() const;
+
         virtual ~Blur() = default;
 
     };

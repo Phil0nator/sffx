@@ -13,6 +13,15 @@ namespace sffx
         m_composite.create(width,height);
     }
 
+    void MotionBlur::setSize( unsigned width, unsigned height )
+    {
+        m_composite.create(width,height);
+        for (auto& f : m_frames) f.create( width, height );
+    }
+    sf::Vector2u MotionBlur::getSize() const
+    {
+        return m_composite.getSize();
+    }
     
     size_t MotionBlur::getFrames() const
     { return m_frames.size(); }

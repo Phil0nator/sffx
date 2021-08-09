@@ -139,4 +139,26 @@ void main()
     }
 
 
+    void Blur::setIntensity( float intensity )
+    {
+        m_intensity = intensity;
+    }
+    float Blur::getIntensity() const
+    {
+        return m_intensity;
+    }
+
+    void Blur::setScale( float scale )
+    {
+        m_buffers[0].create( scale*m_region.width, scale*m_region.height );
+        m_buffers[0].setSmooth(true);
+        m_buffers[1].create( scale*m_region.width, scale*m_region.height );
+        m_buffers[0].setSmooth(true);
+        m_scale = scale;
+    }
+    float Blur::getScale() const
+    {
+        return m_scale;
+    }
+
 }

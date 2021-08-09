@@ -16,9 +16,16 @@ int main(int argc, char const *argv[])
     buffer.create( 600,600 );
     buffer.setSmooth(true);
     
-    sffx::Blur blur{ 600,600 };
-    blur.setAxis( {0,0} );
+    sffx::Shake shake( 600,600 );
+    shake.setSpeed( 0.4 );
+    shake.setIntensity( 0.015 );
+    sffx::Blur blur{600,600};
+    blur.setIntensity(5);
+    sffx::EffectPipeline pipeline { 600, 600, {&shake, &blur} };
 
+    sffx::MotionBlur mb{600,600};
+
+    std::optional< sf::Clock > doShake;
 
     while (window->isOpen())
     {
@@ -29,7 +36,11 @@ int main(int argc, char const *argv[])
                 window->close();
             if (event.type == sf::Event::MouseMoved)
             {
-                rect.setPosition( event.mouseMove.x, event.mouseMove.y );
+                rect.setPosition( event.mouseMove.x-25, event.mouseMove.y-25 );
+            }
+            if (event.type == sf::Event::MouseButtonPressed)
+            {
+                doShake = sf::Clock();
             }
         }
 
@@ -37,7 +48,18 @@ int main(int argc, char const *argv[])
         buffer.clear(sf::Color(255,255,255));
         buffer.draw(rect);
         buffer.display();
-        window->draw( blur( buffer.getTexture() ) );
+        if (doShake)
+        {
+            window->draw( mb( *pipeline( buffer.getTexture() ).getTexture() ) );
+            if (doShake->getElapsedTime() >= sf::milliseconds(500))
+            {
+                doShake = std::nullopt;
+            }
+        }
+        else
+        {
+            window->draw( mb(buffer.getTexture()) );
+        }
         window->display();
     }
 

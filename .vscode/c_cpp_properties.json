@@ -1,0 +1,15 @@
+{
+    "configurations": [
+        {
+            "cppStandard": "gnu++20",
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu17",
+            "includePath": [
+                "include/",
+                "include/sffx"
+            ]
+        }
+    ],
+    "version": 4
+}

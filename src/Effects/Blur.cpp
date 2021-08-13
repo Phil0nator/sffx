@@ -47,7 +47,7 @@ void main()
 )";
 
     Blur::Blur( unsigned width, unsigned height, float scale, float intensity, sf::Vector2<bool> axis )
-    : m_region( sf::Vector2i(0,0), sf::Vector2i(width,height) ),
+    : RegionBased(sf::IntRect{ sf::Vector2i(0,0), sf::Vector2i(width,height) }),
     m_axis(axis),
     m_scale(scale),
     m_intensity(intensity)
@@ -65,20 +65,6 @@ void main()
     }
 
 
-    sf::IntRect Blur::getRegion() const
-    {
-        return m_region;
-    }
-    void Blur::setRegion( const sf::IntRect& rect )
-    {
-        m_region = rect;
-        m_buffers[0].create(rect.width*m_scale,rect.height*m_scale);
-        m_buffers[0].setSmooth(true);
-        m_buffers[1].create(rect.width*m_scale,rect.height*m_scale);
-        m_buffers[1].setSmooth(true);
-        
-    }
-
     sf::Vector2<bool> Blur::getAxis() const
     {
         return m_axis;
@@ -90,10 +76,20 @@ void main()
 
     sf::Sprite Blur::operator()( const sf::Texture& t )
     {
+        
+        if (m_buffers[0].getSize() != sf::Vector2u{m_region.width*m_scale, m_region.height*m_scale})
+        {
+            m_buffers[0].create(m_region.width*m_scale,m_region.height*m_scale);
+            m_buffers[0].setSmooth(true);
+            m_buffers[1].create(m_region.width*m_scale,m_region.height*m_scale);
+            m_buffers[1].setSmooth(true);
+        }
+
         sf::Sprite drawer {t};
         drawer.setScale( m_scale, m_scale );
         drawer.setTextureRect(m_region);
-        
+
+
         if (!m_axis.x and !m_axis.y)
         {
             sf::Vector2f size = (sf::Vector2f) m_buffers[0].getSize();
@@ -150,10 +146,6 @@ void main()
 
     void Blur::setScale( float scale )
     {
-        m_buffers[0].create( scale*m_region.width, scale*m_region.height );
-        m_buffers[0].setSmooth(true);
-        m_buffers[1].create( scale*m_region.width, scale*m_region.height );
-        m_buffers[0].setSmooth(true);
         m_scale = scale;
     }
     float Blur::getScale() const

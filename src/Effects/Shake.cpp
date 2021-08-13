@@ -30,7 +30,7 @@ void main()
         float intensity,
         float speed
     ):
-        m_region( {0,0}, {width, height} ),
+        RegionBased(sf::IntRect{ {0,0}, {width, height} }),
         m_intensity(intensity),
         m_timer(0),
         m_speed(speed)
@@ -42,14 +42,6 @@ void main()
                 }
             }
 
-    void Shake::setSize( unsigned width, unsigned height )
-    {
-        m_buffer.create(width,height);
-    }
-    sf::Vector2u Shake::getSize() const
-    {
-        return m_buffer.getSize();
-    }
 
     void Shake::setSpeed( float speed )
     {
@@ -69,19 +61,13 @@ void main()
         return m_intensity;
     }
 
-    sf::IntRect Shake::getRegion() const
-    {
-        return m_region;
-    }
-    void Shake::setRegion( const sf::IntRect& rect )
-    {
-        m_region = rect;
-    }
-
 
     sf::Sprite Shake::operator()( const sf::Texture& t )
     {
-
+        if (m_buffer.getSize() != sf::Vector2u{m_region.width, m_region.height})
+        {
+            m_buffer.create(m_region.width,m_region.height);
+        }
         m_buffer.clear();
         sf::Sprite drawer(t);
         if ( sf::Vector2u{m_region.width, m_region.height} != m_buffer.getSize() )
